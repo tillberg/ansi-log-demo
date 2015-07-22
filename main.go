@@ -12,8 +12,8 @@ var colors []string = []string{"red", "yellow", "magenta", "cyan", "blue"}
 func writeStuff(num int, stop chan bool, done chan bool) {
     i := 0
     color := colors[num / 4]
-    out := log.New(os.Stderr, fmt.Sprintf("@[dim][@[green:writer-%d]] ", num), log.Lelapsed)
-    format := fmt.Sprintf("@[dim:My number is] @[%s:%%d]", color)
+    out := log.New(os.Stderr, fmt.Sprintf("@(dim)[@(green:writer-%d)] ", num), log.Lelapsed)
+    format := fmt.Sprintf("@(dim:My number is) @(%s:%%d)", color)
     for {
         select {
         case <- stop:
