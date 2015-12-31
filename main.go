@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/tillberg/ansi-log"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/tillberg/ansi-log"
 )
 
 var colors []string = []string{"red", "yellow", "magenta", "cyan", "blue"}
@@ -13,7 +14,7 @@ var colors []string = []string{"red", "yellow", "magenta", "cyan", "blue"}
 func writeStuff(num int, stop chan bool, done chan bool) {
 	i := 0
 	color := colors[num/4]
-	out := log.New(os.Stderr, fmt.Sprintf("@(dim)[@(green:writer-%d)] ", num), log.Lelapsed)
+	out := alog.New(os.Stderr, fmt.Sprintf("@(dim)[@(green:writer-%d)] ", num), alog.Lelapsed)
 	format := fmt.Sprintf("@(dim:My number is) @(%s:%%d)", color)
 	for {
 		select {
@@ -34,8 +35,8 @@ func writeStuff(num int, stop chan bool, done chan bool) {
 }
 
 func main() {
-	log.EnableMultilineMode()
-	log.EnableColorTemplate()
+	alog.EnableMultilineMode()
+	alog.EnableColorTemplate()
 	stop := make(chan bool)
 	done := make(chan bool)
 
@@ -48,14 +49,14 @@ func main() {
 	signal.Notify(signalChan, os.Interrupt)
 	go func() {
 		for _ = range signalChan {
-			log.Println("Received SIGINT. Shutting down...")
+			alog.Println("Received SIGINT. Shutting down...")
 			for n := 0; n < numLines; n++ {
 				stop <- true
 			}
 			for n := 0; n < numLines; n++ {
 				<-done
 			}
-			log.Println("Exiting...")
+			alog.Println("Exiting...")
 			cleanupDone <- true
 		}
 	}()
